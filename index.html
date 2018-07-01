@@ -34,15 +34,15 @@
         <div class="form-group form-inline">
           <span class="labels"><label class="from-label"> FROM:</label><label class="to-label"> TO:</label></span>
           <div class="country-select">
-            <select class="custom-select" name="fromCurrency" id="fromCurrency" onchange="showFromId(this)"></select>
+            <select class="custom-select" name="fromCurrency" id="fromCurrency"></select>
             <span class="fa fa-exchange change-icon"></span>
-            <select class="custom-select" name="toCurrency" id="toCurrency" onchange="showFromIdTwo(this)"></select>
+            <select class="custom-select" name="toCurrency" id="toCurrency"></select>
           </div>
         </div>
         <button class="convert-button btn btn-primary btn-block" onclick="convert()">CONVERT</button>
       </form>
     </div>
-    <div class="card-body text-right bg-black">
+    <div class="card-body text-right footer">
       <h1 id="viewValue" class="text-center text-white"></h1>
     </div>
   </div>

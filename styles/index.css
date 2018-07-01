@@ -77,7 +77,7 @@ button.convert-button.btn.btn-primary.btn-block:active {
   border-radius: 3px;
 }
 
-.bg-black {
+.footer {
   background: linear-gradient(45deg, #82b342, #d8ae51);
   min-height: 119px;
 }

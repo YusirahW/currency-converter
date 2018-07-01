@@ -1,37 +1,13 @@
 const el = e => document.querySelector(e);
-// const insertHTML = (e) => {
-//
-// }
-// const getFromCurrencyName = () => {
-// 	return el("#fromCurrency").value;
-// };
-// const getToCurrencyName = () => {
-// 	return el("#toCurrency").value;
-// };
-// const getFromCurrencyId = () => {
-// 	return el("#fromCurrency").value;
-// };
-// const getToCurrencyId = () => {
-// 	return el("#toCurrency").value;
-// };
-// const getFromCurrencyValue = () => {
-// 	return el("#fromCurrencyValue").value;
-// };
-
 
 // Initial Values
 document.getElementById("viewValue").innerHTML = `00.00`;
 
+idSymbolFrom = '';
+idSymbolTo = '';
 
-// sortSelectOptions('#fromCurrency', true);
-
-
-idSymbolFrom = 'Lek';
-idSymbolTo = 'Lek';
-
-
-
-convert = (s) => {
+convert = () => {
+	userConnection();
 
 	let fromValue = document.querySelector('#fromCurrencyValue').value;
 	let fromCurr = document.querySelector('#fromCurrency').value;
@@ -45,60 +21,21 @@ convert = (s) => {
 		.then(responseValue => {
 			let unitValue = responseValue[`${fromCurr}_${toCurr}`];
 			let currencyConverted = fromValue * unitValue;
-			console.log(requestUrl);
-			document.getElementById("viewValue").innerHTML = `${idSymbolTo} ${Math.round(currencyConverted)}.00`;
+			document.getElementById("viewValue").innerHTML = `${idSymbolTo} ${currencyConverted.toFixed(2)}`;
 		});
 
 };
-
-
-
-
-// Service Worker registration
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker
-		.register('./service-worker.js', {
-			scope: './'
-		})
-		.then(registration => {
-			console.log("Service Worker Registered", registration);
-		})
-		.catch(err => {
-			console.log("Service Worker failed to Register", err);
-		})
-}
-
 // API
-
 fetch('https://free.currencyconverterapi.com/api/v5/countries')
 	.then(response => response.json())
-	.then(myJson => {
-
-
+	.then(res => {
 		let html = '';
-		for (let country of Object.values(myJson.results)) {
-			// console.log(country);
+		for (let country of Object.values(res.results)) {
 			html += `<option id="${country.currencySymbol}" value="${country.currencyId}">${country.currencyName}</option>`;
 		}
 		el("#fromCurrency").insertAdjacentHTML('afterbegin', html);
 		el("#toCurrency").insertAdjacentHTML('afterbegin', html);
 	});
-
-
-
-
-showFromId = (s) => {
-	idSymbolFrom = s[s.selectedIndex].id;
-	userConnection();
-	convert();
-};
-
-
-showFromIdTwo = (s) => {
-	idSymbolTo = s[s.selectedIndex].id;
-	userConnection();
-	convert();
-};
 
 userConnection = () => {
 	if (navigator.onLine) {
@@ -114,10 +51,21 @@ userConnection = () => {
 		}
 	}
 };
-
+// Service Worker registration
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker
+		.register('./service-worker.js', {
+			scope: './'
+		})
+		.then(registration => {
+			console.log("Service Worker Registered", registration);
+		})
+		.catch(err => {
+			console.log("Service Worker failed to Register", err);
+		})
+}
 
 // IndexedDb initialization
-
 const dbPromise = idb.open('currencyConverter', 3, (upgradeDb) => {
 	switch (upgradeDb.oldVersion) {
 		case 0:
@@ -139,9 +87,7 @@ const dbPromise = idb.open('currencyConverter', 3, (upgradeDb) => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-	/*
-	 Fetch Countries
-		*/
+	// Fetch Countries
 	fetch('https://free.currencyconverterapi.com/api/v5/countries')
 		.then(res => res.json())
 		.then(res => {
